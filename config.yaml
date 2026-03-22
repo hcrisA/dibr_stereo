@@ -1,0 +1,50 @@
+# DIBR单目转立体视觉系统配置
+
+# 输入输出设置
+input:
+  left_video: "data/input/left_video.mp4"  # 左视频路径
+  output_dir: "data/output"                 # 输出目录
+
+# 相机参数（立体基线距离，单位：米）
+camera:
+  baseline: 0.065              # 双目基线距离（65mm为常见人眼距离）
+  focal_length: 1000          # 焦距（像素单位，可根据实际调整）
+  cx: null                    # 主点x坐标（null表示自动设置为图像宽度/2）
+  cy: null                    # 主点y坐标（null表示自动设置为图像高度/2）
+
+# 深度估计设置
+depth:
+  model: "DPT_Large"          # MiDaS模型：DPT_Large, DPT_Hybrid, MiDaS_small
+  device: "cuda"              # cuda或cpu
+  inverse_depth: true         # MiDaS输出的是逆深度，需要反转
+  
+# DIBR渲染设置
+dibr:
+  # 视差计算
+  disparity_scale: 1.0        # 视差缩放因子
+  
+  # 空洞填充
+  hole_filling:
+    method: "telea"           # telea或ns（Navier-Stokes）
+    radius: 5                 # 填充半径
+    
+  # 后处理
+  postprocess:
+    edge_smoothing: true      # 边缘平滑
+    bilateral_filter: true    # 双边滤波
+    sigma_color: 10           # 双边滤波颜色sigma
+    sigma_space: 15           # 双边滤波空间sigma
+
+# 性能设置
+performance:
+  batch_size: 1               # 批处理大小
+  num_workers: 4              # 数据加载线程数
+  fp16: false                 # 半精度推理（速度更快但可能降低质量）
+
+# 输出设置
+output:
+  save_depth: true            # 是否保存深度图
+  save_disparity: true        # 是否保存视差图
+  save_intermediate: false    # 是否保存中间结果（调试用）
+  video_fps: null             # 输出视频fps（null表示与输入相同）
+  video_codec: "mp4v"         # 视频编码器

@@ -1,0 +1,50 @@
+# Mono2Stereo数据集评估配置
+
+# 数据集路径（相对于项目根目录）
+dataset:
+  root: "../Data/mono2stereo-test"    # 数据集根目录
+  # left_dir和right_dir会自动从root目录下的场景子目录读取
+
+# 模型配置
+model:
+  # MiDaS模型权重路径
+  midas_path: "../Data/checkpoints/dpt_hybrid_384.pt"
+  # Depth-Anything-V2模型权重路径（轻量级版本）
+  depth_anything_v2_small_path: "../Data/checkpoints/depth_anything_v2_vits.pth"
+  depth_anything_v2_base_path: "../Data/checkpoints/depth_anything_v2_vitb.pth"
+  type: "DPT_Hybrid"  # 可选: DPT_Hybrid, Depth-Anything-V2-Small, Depth-Anything-V2-Base
+  device: "cuda"
+
+# DIBR参数
+dibr:
+  baseline: 0.065              # 双目基线距离（米）
+  focal_length: 800            # 焦距（像素）
+  
+  # 空洞填充
+  hole_filling:
+    method: "telea"            # telea 或 ns
+    radius: 5
+    
+  # 后处理
+  postprocess:
+    edge_smoothing: true
+    bilateral_filter: false
+
+# 输出配置
+output:
+  dir: "./mono2stereo_results"
+  save_images: true            # 是否保存生成的图像
+  save_depth: false            # 是否保存深度图
+  
+# 评估配置
+evaluation:
+  batch_size: 1                # 批处理大小
+  num_workers: 4               # 数据加载线程
+  
+# 华为赛题指标要求（参考）
+target_metrics:
+  psnr: 32.0                   # PSNR > 32 dB
+  ssim: 0.75                   # SSIM > 0.75
+  siou: 0.28                   # SIoU > 0.28
+  fps: 60                      # FPS > 60
+  memory: 500                  # 内存 < 500 MB
