@@ -95,18 +95,6 @@ python download_depth_anything_v2.py \
   --device cuda
 ```
 
-#### 方法C：处理视频文件
-
-```bash
-cd dibr_stereo
-
-# 处理单目视频生成立体视频
-python run.py -i input_video.mp4 -o ../Data/outputs/right_video.mp4
-
-# 保存深度图
-python run.py -i input.mp4 -o output.mp4 --save-depth
-```
-
 ## 模型对比
 
 | 模型 | 大小 | PSNR | SSIM | SIoU | FPS | 特点 |
